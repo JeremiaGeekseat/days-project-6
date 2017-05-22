@@ -1,0 +1,289 @@
+﻿@model IEnumerable<ModelLayer.Models.Movie>
+
+@{
+    ViewBag.Title = "Home Movie";
+}
+
+<section class="content-header">
+    <h1>
+        Movie
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Movie</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="panel-heading">
+            <h3>TOP MOVIES</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form">
+                        <div class="form-group col-md-12" style="min-height:75px;">
+                            <div class="form-group col-md-4">
+                                @Html.Label("Title", new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-film"></i></span>
+                                        <input id="search_title" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                @Html.Label("Release Date Interval", new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <input id="start" style="width: 50%;" value="10/10/2017" />
+                                        <input id="end" style="width: 50%;" value="10/10/2017" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                @Html.Label("Recommended", new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <div id="recommended"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <a class="btn btn-info" id="search_btn">Search</a>
+                            <a class="btn btn-danger" id="search_reset">Reset</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-body">
+            <a href="@Url.Action("Create", "Movies")" class="btn btn-primary" style="background-color:#e3e3e3; border-color:#e3e3e3;"><i class="fa fa-plus"></i> </a>
+            <div id="movieTable"></div>
+            <div id="details"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var dataItem, windowDelete, temp;
+    
+    var getMovieName = $.ajax({
+        type: 'GET',
+        url: 'Movies/GetMoviesName/',
+        async: false,
+        dataType: 'json'
+    }).responseJSON.Data;
+
+    $(document).ready(function () {
+
+        $("#search_btn").click(function () {
+            var title = $("#search_title").val();
+            var release = $("#released").val();
+            var recommend = $("#recommended").val();
+        });
+
+        $("#search_reset").click(function () {
+            $("#search_title").val("");
+            $("#start").val("");
+            $("#end").val("");
+            $("#recommended").val("");
+        });
+
+        function startChange() {
+            var startDate = startDateRange.value(),
+                endDate = endDateRange.value();
+
+            if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                endDateRange.min(startDate);
+            } else if (endDate) {
+                startDateRange.max(new Date(endDate));
+            } else {
+                endDate = new Date();
+                startDateRange.max(endDate);
+                endDateRange.min(endDate);
+            }
+        }
+
+        function endChange() {
+            var endDate = endDateRange.value(),
+                startDate = startDateRange.value();
+
+            if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                startDateRange.max(endDate);
+            } else if (startDate) {
+                endDateRange.min(new Date(startDate));
+            } else {
+                endDate = new Date();
+                startDateRange.max(endDate);
+                endDateRange.min(endDate);
+            }
+        }
+
+        var startDateRange = $("#start").kendoDatePicker({
+            change: startChange
+        }).data("kendoDatePicker");
+
+        var endDateRange = $("#end").kendoDatePicker({
+            change: endChange
+        }).data("kendoDatePicker");
+
+        startDateRange.max(endDateRange.value());
+        endDateRange.min(startDateRange.value());
+
+        $("#recommended").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+                { text: "All", value: "all" },
+                { text: "Yes", value: "yes" },
+                { text: "No", value: "no" }
+            ]
+        });
+
+        $("#search_btn").kendoButton();
+        $("#search_reset").kendoButton();
+
+        $("#search_title").kendoAutoComplete(getMovieName);
+
+        var movieSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '/Movies/GetMovies/',
+                    dataType: "json"
+                },
+                update: {
+                    url: '/Movies/Update/',
+                    dataType: "json",
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8'
+                },
+                create: {
+                    url: '/Movies/Create/',
+                    dataType: "json",
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8'
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read") {
+                        return kendo.stringify(options);
+                    }
+                }
+            },
+            batch: false,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "ID",
+                    fields: {
+                        ID: { editable: false, nullable: true },
+                        Title: { validation: { required: true } },
+                        WeekendRevenure: { type: "number", validation: { required: true, min: 1 } },
+                        GrossRevenue: { type: "number", validation: { required: true, min: 1 } },
+                        Released: { type: "date" },
+                        Recommended: { type: "boolean" }
+                    }
+                }
+            }
+        });
+
+        $("#movieTable").kendoGrid({
+            columns: [
+                {
+                    field: "ID",
+                    title: "ID"
+                },
+                {
+                    field: "Title",
+                    title: "Title"
+                },
+                {
+                    field: "WeekendRevenure",
+                    title: "Weekend Revenure"
+                },
+                {
+                    field: "GrossRevenue",
+                    title: "Gross Revenue"
+                },
+                {
+                    field: "Released",
+                    title: "Released",
+                    template: "#= kendo.toString(kendo.parseDate(Released, 'yyyy-MM-dd'), 'MMMM dd, yyyy') #"
+                },
+                {
+                    field: "Recommended",
+                    title: "Recommended",
+                    template: '# if( Recommended ){ # <i class="fa fa-thumbs-o-up"></i> # } else { # <i class="fa fa-thumbs-o-down"></i> # } #'
+                },
+                {
+                    title: "Action",
+                    command:
+                    [
+                        {
+                            text: "Delete",
+                            click: selectDelete
+                        }
+                    ],
+                    width: "180px"
+                }
+            ],
+            toolbar: ["create", "save", "cancel"],
+            dataSource: movieSource,
+            groupable: true,
+            sortable: true,
+            pageable: true,
+            editable: true
+        });
+
+        windowDelete = $("#details").kendoWindow({
+            title: "Delete Movie",
+            modal: true,
+            visible: false,
+            resizable: false,
+            width: 300
+        }).data("kendoWindow");
+
+        temp = kendo.template($("#deleteTemplate").html());
+    });
+
+    function selectDelete(e) {
+        e.preventDefault();
+
+        dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        windowDelete.content(temp(dataItem));
+        windowDelete.center().open();
+    }
+
+    function deleteMovie() {
+        var table = $("tr[data-uid='" + dataItem.uid + "']");
+
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify({ id: dataItem.ID }),
+            dataType: "json",
+            url: 'Movies/DeleteConfirmed',
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            dataType: 'json'
+        });
+
+        table.remove();
+        windowDelete.close();
+    }
+</script>
+<script type="text/x-kendo-template" id="deleteTemplate">
+    <div id="details-container">
+        <div class="text-center"> Delete #= Title # for sure? </div><br>
+        <div class="text-center"><button class="btn btn-danger" onclick="deleteMovie()"> Delete </button></div>
+    </div>
+</script>

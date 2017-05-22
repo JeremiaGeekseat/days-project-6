@@ -1,0 +1,77 @@
+a {
+    color: white;
+}
+
+.main-header {
+    background-color: #f26565;
+}
+
+.logo {
+    background-color: #a32727;
+}
+
+    .logo:hover {
+        color: white;
+    }
+
+.main-sidebar {
+    color: white;
+    background-color: #222d32;
+}
+
+.user-panel {
+    background-color: #1a2226;
+}
+
+.sidebar-menu {
+    margin-top: 10px;
+}
+
+.input-search {
+    background-color: #454f54;
+}
+
+.daterangepicker_input > .input-mini {
+    color: white;
+}
+
+.form-control {
+    background-color: #374850;
+    border-radius: 5px;
+    color: white;
+}
+
+.online {
+    color: #409134;
+}
+
+#sign-out-button {
+    cursor: pointer;
+}
+
+/*AFter ASP.NET MVC*/
+
+.navbar-nav > li > a {
+    max-height: 50px;
+}
+
+    .navbar-nav > li > a > span {
+        position: relative;
+        top: -10px;
+    }
+
+body {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+/*.btn-primary {
+    background-color: #f26565;
+}*/
+
+#search_title {
+    background-color: #e9e9e9;
+}
+
+    #search_title:hover, #search_title:focus {
+        background-color: #bcb4b0;
+    }

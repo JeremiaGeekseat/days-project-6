@@ -1,0 +1,116 @@
+﻿@model IEnumerable<ModelLayer.Models.Theater>
+
+@{
+    ViewBag.Title = "Home Theater";
+}
+
+<section class="content-header">
+    <h1>
+        Theater
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Theater</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="panel-heading">
+            <h3>Theater</h3>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-body">
+            <a href="@Url.Action("Create", "Theaters")" class="btn btn-primary" style="background-color:#e3e3e3; border-color:#e3e3e3;"><i class="fa fa-plus"></i> </a>
+            <div id="theaterTable">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var theaterSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '/Theaters/GetTheaters/',
+                dataType: "json"
+            },
+            update: {
+                url: '/Theaters/Update/',
+                dataType: "json",
+                type: "post",
+                contentType: 'application/json; charset=utf-8'
+            },
+            create: {
+                url: '/Theaters/Create/',
+                dataType: "json",
+                type: "post",
+                contentType: 'application/json; charset=utf-8'
+            },
+            parameterMap: function (options, operation) {
+                if (operation !== "read") {
+                    return kendo.stringify(options);
+                }
+            }
+        },
+        batch: false,
+        pageSize: 20,
+        schema: {
+            model: {
+                id: "ID",
+                fields: {
+                    ID: { editable: false, nullable: true },
+                    Name: { validation: { required: true } },
+                    Capacity: { type: "number", validation: { required: true, min: 1 } },
+                    City: { validation: { required: true } },
+                    Level: { validation: { required: true } }
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+
+        $("#theaterTable").kendoGrid({
+            columns:
+            [
+                {
+                    field: "ID",
+                    title: "ID"
+                },
+                {
+                    field: "Name",
+                    title: "Name"
+                },
+                {
+                    field: "Capacity",
+                    title: "Capacity"
+                },
+                {
+                    field: "City",
+                    title: "City"
+                },
+                {
+                    field: "Level",
+                    title: "Level"
+                },
+                {
+                    command:
+                    [
+                        "destroy"
+                    ],
+                    width: "180px"
+                }
+            ],
+            toolbar: ["create", "save", "cancel"],
+            dataSource: theaterSource,
+            groupable: true,
+            sortable: true,
+            pageable: true,
+            editable: true
+        });
+    });
+</script>

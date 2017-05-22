@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title | GeekMovie</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/kendo/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/kendo/js")
+</head>
+<body>
+    <div class="wrapper">
+
+        <header class="main-header">
+            <a href="@Url.Action("Index", "Home")" class="logo">
+                <span class="logo-mini"><b>A</b>LT</span>
+                <span class="logo-lg"><b>GeekMovie</b>.com</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+
+                <a href="@Url.Action("Index", "Home")" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-menu pull-right">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">4</span>
+                            </a>
+                        </li>
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning">10</span>
+                            </a>
+                        </li>
+                        <li class="dropdown tasks-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-flag-o"></i>
+                                <span class="label label-danger">9</span>
+                            </a>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="/Images/user2-160x160.jpg" class="user-image" alt="User Image">
+                                @*<span class="hidden-xs">Alexander Pierce </span>*@
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="main-sidebar">
+            <section class="sidebar">
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="/Images/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p id="username">@*Alexander Pierce*@ @Session["Email"]</p>
+                        <a href="#"><i class="fa fa-circle online"></i> Online</a>
+                    </div>
+                </div>
+                <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control input-search" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <ul class="sidebar-menu">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li>
+                        <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Movies")">
+                            <i class="fa fa-film"></i> <span>Movie</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-building"></i>
+                            <span>Theaters</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "Theaters")"><i class="fa fa-circle-o"></i> Theaters table</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-ticket"></i>
+                            <span>Tickets</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "Tickets")"><i class="fa fa-circle-o"></i> Tickets table</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("LogOff", "Account", new { id = "logoutForm"})"><i class="fa fa-sign-out"></i> <span>Log Out</span></a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2017 Geekseat. </strong> All rights
+            reserved.
+        </footer>
+        <div class="control-sidebar-bg"></div>
+    </div>
+    @Scripts.Render("~/bundles/angular")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
