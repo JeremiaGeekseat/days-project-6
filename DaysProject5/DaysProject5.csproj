@@ -1072,6 +1072,10 @@
       <Project>{f14c4cd2-2473-45d8-97dc-c1aaac2a3f0b}</Project>
       <Name>ModelLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RepositoryLayer\RepositoryLayer.csproj">
+      <Project>{aa823969-c5bf-4462-8057-bae8f1efe1f0}</Project>
+      <Name>RepositoryLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

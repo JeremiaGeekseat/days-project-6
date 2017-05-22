@@ -1,0 +1,13 @@
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\RepositoryLayer.dll.config
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\RepositoryLayer.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\RepositoryLayer.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\EntityFramework.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\ModelLayer.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\ModelLayer.pdb
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\ModelLayer.dll.config
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\EntityFramework.xml
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\obj\Debug\RepositoryLayer.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\obj\Debug\RepositoryLayer.dll
+C:\Users\User\Documents\Visual Studio 2017\Projects\days-project-6\RepositoryLayer\obj\Debug\RepositoryLayer.pdb

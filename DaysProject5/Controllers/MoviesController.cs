@@ -10,23 +10,24 @@ using ModelLayer;
 using ModelLayer.Models;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using RepositoryLayer;
 
 namespace DaysProject6.Controllers
 {
     public class MoviesController : Controller
     {
-        private ModelContext db = new ModelContext();
+        private MovieRepository repository = new MovieRepository();
 
         // GET: Movies
         public ActionResult Index()
         {
-            return View(db.Movies.ToList());
+            return View(repository.ViewAll());
         }
 
         // GET: Movies
         public JsonResult GetMovies()
         {
-            var result = db.Movies.ToList().Select(movie => new Movie
+            var result = repository.ViewAll().Select(movie => new Movie
             {
                 ID = movie.ID,
                 Title = movie.Title,
@@ -42,7 +43,7 @@ namespace DaysProject6.Controllers
         // GET: Movies
         public JsonResult GetMoviesName([DataSourceRequest] DataSourceRequest request)
         {
-            var result = db.Movies.ToList().ToDataSourceResult(request, movie => movie.Title);
+            var result = repository.ViewAll().ToDataSourceResult(request, movie => movie.Title);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -52,8 +53,7 @@ namespace DaysProject6.Controllers
         {
             if (model != null)
             {
-                db.Movies.Add(model);
-                db.SaveChanges();
+                repository.Insert(model);
             }
             return Json(model);
         }
@@ -61,9 +61,7 @@ namespace DaysProject6.Controllers
         [HttpPost]
         public void DeleteConfirmed(int id)
         {
-            Movie movie = db.Movies.Find(id);
-            db.Movies.Remove(movie);
-            db.SaveChanges();
+            repository.Delete(id);
         }
 
         [HttpPost]
@@ -71,50 +69,18 @@ namespace DaysProject6.Controllers
         {
             if (model != null)
             {
-                db.Entry(model).State = EntityState.Modified;
-                db.SaveChanges();
+                repository.Update(model);
             }
             return Json(model);
         }
 
-        // GET: Movies/Details/5
-        public ActionResult Details(int? movieID)
-        {
-            if (movieID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Movie movie = db.Movies.Find(movieID);
-            if (movie == null)
-            {
-                return HttpNotFound();
-            }
-            return View(movie);
-        }
-
+        
         // GET: Movies/Create
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: Movies/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "ID,Title,WeekendRevenure,GrossRevenue,Released,Recommended")] Movie movie)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Movies.Add(movie);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(movie);
-        //}
-
+        
         // GET: Movies/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -122,7 +88,7 @@ namespace DaysProject6.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Movie movie = db.Movies.Find(id);
+            Movie movie = repository.View(id);
             if (movie == null)
             {
                 return HttpNotFound();
@@ -133,18 +99,18 @@ namespace DaysProject6.Controllers
         // POST: Movies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Title,WeekendRevenure,GrossRevenue,Released,Recommended")] Movie movie)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(movie).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(movie);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "ID,Title,WeekendRevenure,GrossRevenue,Released,Recommended")] Movie movie)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(movie).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(movie);
+        //}
 
         // GET: Movies/Delete/5
         //public ActionResult Delete(int? id)
@@ -176,7 +142,7 @@ namespace DaysProject6.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repository.Dispose();
             }
             base.Dispose(disposing);
         }
