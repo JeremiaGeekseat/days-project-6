@@ -37,10 +37,7 @@
                             <div class="form-group col-md-4">
                                 @Html.Label("Release Date Interval", new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    <div class="input-group">
-                                        <input id="start" style="width: 50%;" value="10/10/2017" />
-                                        <input id="end" style="width: 50%;" value="10/10/2017" />
-                                    </div>
+                                    <date-range></date-range>
                                 </div>
                             </div>
                             <div class="form-group col-md-4">
@@ -93,51 +90,6 @@
             $("#end").val("");
             $("#recommended").val("");
         });
-
-        function startChange() {
-            var startDate = startDateRange.value(),
-                endDate = endDateRange.value();
-
-            if (startDate) {
-                startDate = new Date(startDate);
-                startDate.setDate(startDate.getDate());
-                endDateRange.min(startDate);
-            } else if (endDate) {
-                startDateRange.max(new Date(endDate));
-            } else {
-                endDate = new Date();
-                startDateRange.max(endDate);
-                endDateRange.min(endDate);
-            }
-        }
-
-        function endChange() {
-            var endDate = endDateRange.value(),
-                startDate = startDateRange.value();
-
-            if (endDate) {
-                endDate = new Date(endDate);
-                endDate.setDate(endDate.getDate());
-                startDateRange.max(endDate);
-            } else if (startDate) {
-                endDateRange.min(new Date(startDate));
-            } else {
-                endDate = new Date();
-                startDateRange.max(endDate);
-                endDateRange.min(endDate);
-            }
-        }
-
-        var startDateRange = $("#start").kendoDatePicker({
-            change: startChange
-        }).data("kendoDatePicker");
-
-        var endDateRange = $("#end").kendoDatePicker({
-            change: endChange
-        }).data("kendoDatePicker");
-
-        startDateRange.max(endDateRange.value());
-        endDateRange.min(startDateRange.value());
 
         $("#recommended").kendoComboBox({
             dataTextField: "text",

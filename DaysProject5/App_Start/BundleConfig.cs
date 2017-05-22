@@ -56,6 +56,7 @@ namespace DaysProject6
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                         "~/Angular/app.js",
                         "~/Angular/services/factory.js",
+                        "~/Angular/directives/directive-date-range.js",
                         "~/Angular/controllers/movieController.js"));
 
             bundles.IgnoreList.Clear();
