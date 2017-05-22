@@ -83,10 +83,10 @@
                 <ul class="sidebar-menu">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
-                        <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+                        <a href="#!/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "Movies")">
+                        <a href="#!/movie">
                             <i class="fa fa-film"></i> <span>Movie</span>
                         </a>
                     </li>
@@ -120,7 +120,7 @@
                 </ul>
             </section>
         </div>
-        <div class="content-wrapper">
+        <div class="content-wrapper" ng-controller="movieController">
             @RenderBody()
         </div>
         <footer class="main-footer">
@@ -131,5 +131,315 @@
     </div>
     @Scripts.Render("~/bundles/app")
     @RenderSection("scripts", required: false)
+
+    <script type="text/ng-template" id="home.html">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="carousel slide" id="theCarousel" data-interval="2000">
+
+                        <ol class="carousel-indicators">
+                            <li data-target="#theCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#theCarousel" data-slide-to="1"></li>
+                            <li data-target="#theCarousel" data-slide-to="2"></li>
+                            <li data-target="#theCarousel" data-slide-to="3"></li>
+                        </ol>
+
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img src="/Images/hello-world.png" alt="1" class="img-responsive" width="100%" />
+                                <div class="carousel-caption">
+                                    <h4>Hello</h4>
+                                    <p>World</p>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="/Images/hello-world.png" alt="2" class="img-responsive" width="100%" />
+                                <div class="carousel-caption">
+                                    <h4>Hello</h4>
+                                    <p>World</p>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="/Images/hello-world.png" alt="3" class="img-responsive" width="100%" />
+                                <div class="carousel-caption">
+                                    <h4>Hello</h4>
+                                    <p>World</p>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="/Images/hello-world.png" alt="4" class="img-responsive" width="100%" />
+                                <div class="carousel-caption">
+                                    <h4>Hello</h4>
+                                    <p>World</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#theCarousel" class="carousel-control left" data-slide="prev"><span class="icon-prev"></span></a>
+                        <a href="#theCarousel" class="carousel-control right" data-slide="next"><span class="icon-next"></span></a>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </script>
+    <script type="text/ng-template" id="movie.html">
+        <section class="content" ng-init="init()">
+            <div class="box">
+                <div class="panel-heading">
+                    <h3>TOP MOVIES</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form">
+                                <div class="form-group col-md-12" style="min-height:75px;">
+                                    <div class="form-group col-md-4">
+                                        @Html.Label("Title", new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-film"></i></span>
+                                                <input id="search_title" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        @Html.Label("Release Date Interval", new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <date-range></date-range>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        @Html.Label("Recommended", new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <div class="input-group">
+                                                <div id="recommended"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <a class="btn btn-info" id="search_btn">Search</a>
+                                    <a class="btn btn-danger" id="search_reset">Reset</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <table id="movieTable" class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Weekend Revenue</th>
+                                <th>Gross Revenue</th>
+                                <th>Released</th>
+                                <th>Recommended</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th colspan="7"> &nbsp; </th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr style="text-align: center" ng-repeat="movie in movies">
+                                <td> {{ movie.ID }} </td>
+                                <td> {{ movie.Title }} </td>
+                                <td> {{ movie.WeekendRevenure }} </td>
+                                <td> @*{{ movie.GrossRevenue }}*@ </td>
+                                <td> @*{{ formatDate( movie.Released ) }}*@ </td>
+                                <td> <i ng-class="{'fa fa-thumbs-o-up' : movie.Recommended == true, 'fa fa-thumbs-o-down' : movie.Recommended == false}"></i></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary btn-update"><i class="fa fa-pencil"></i></button>
+                                        <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="details"></div>
+                </div>
+            </div>
+        </section>
+    </script>
+    <script>
+        var dataItem, windowDelete, temp;
+
+        //var getMovieName = $.ajax({
+        //    type: 'GET',
+        //    url: '/Movies/GetMoviesName/',
+        //    async: false,
+        //    dataType: 'json'
+        //}).responseJSON.Data;
+
+        $(document).ready(function () {
+
+            $("#search_btn").click(function () {
+                var title = $("#search_title").val();
+                var release = $("#released").val();
+                var recommend = $("#recommended").val();
+            });
+
+            $("#search_reset").click(function () {
+                $("#search_title").val("");
+                $("#start").val("");
+                $("#end").val("");
+                $("#recommended").val("");
+            });
+
+            $("#recommended").kendoComboBox({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: [
+                    { text: "All", value: "all" },
+                    { text: "Yes", value: "yes" },
+                    { text: "No", value: "no" }
+                ]
+            });
+
+            $("#search_btn").kendoButton();
+            $("#search_reset").kendoButton();
+
+            //$("#search_title").kendoAutoComplete(getMovieName);
+
+            //var movieSource = new kendo.data.DataSource({
+            //    transport: {
+            //        read: {
+            //            url: '/Movies/GetMovies/',
+            //            dataType: "json"
+            //        },
+            //        update: {
+            //            url: '/Movies/Update/',
+            //            dataType: "json",
+            //            type: "post",
+            //            contentType: 'application/json; charset=utf-8'
+            //        },
+            //        create: {
+            //            url: '/Movies/Create/',
+            //            dataType: "json",
+            //            type: "post",
+            //            contentType: 'application/json; charset=utf-8'
+            //        },
+            //        parameterMap: function (options, operation) {
+            //            if (operation !== "read") {
+            //                return kendo.stringify(options);
+            //            }
+            //        }
+            //    },
+            //    batch: false,
+            //    pageSize: 20,
+            //    schema: {
+            //        model: {
+            //            id: "ID",
+            //            fields: {
+            //                ID: { editable: false, nullable: true },
+            //                Title: { validation: { required: true } },
+            //                WeekendRevenure: { type: "number", validation: { required: true, min: 1 } },
+            //                GrossRevenue: { type: "number", validation: { required: true, min: 1 } },
+            //                Released: { type: "date" },
+            //                Recommended: { type: "boolean" }
+            //            }
+            //        }
+            //    }
+            //});
+
+            //$("#movieTable").kendoGrid({
+            //    columns: [
+            //        {
+            //            field: "ID",
+            //            title: "ID"
+            //        },
+            //        {
+            //            field: "Title",
+            //            title: "Title"
+            //        },
+            //        {
+            //            field: "WeekendRevenure",
+            //            title: "Weekend Revenure"
+            //        },
+            //        {
+            //            field: "GrossRevenue",
+            //            title: "Gross Revenue"
+            //        },
+            //        {
+            //            field: "Released",
+            //            title: "Released",
+            //            template: "#= kendo.toString(kendo.parseDate(Released, 'yyyy-MM-dd'), 'MMMM dd, yyyy') #"
+            //        },
+            //        {
+            //            field: "Recommended",
+            //            title: "Recommended",
+            //            template: '# if( Recommended ){ # <i class="fa fa-thumbs-o-up"></i> # } else { # <i class="fa fa-thumbs-o-down"></i> # } #'
+            //        },
+            //        {
+            //            title: "Action",
+            //            command:
+            //            [
+            //                {
+            //                    text: "Delete",
+            //                    click: selectDelete
+            //                }
+            //            ],
+            //            width: "180px"
+            //        }
+            //    ],
+            //    toolbar: ["create", "save", "cancel"],
+            //    dataSource: movieSource,
+            //    groupable: true,
+            //    sortable: true,
+            //    pageable: true,
+            //    editable: true
+            //});
+
+            windowDelete = $("#details").kendoWindow({
+                title: "Delete Movie",
+                modal: true,
+                visible: false,
+                resizable: false,
+                width: 300
+            }).data("kendoWindow");
+
+            temp = kendo.template($("#deleteTemplate").html());
+        });
+
+        function selectDelete(e) {
+            e.preventDefault();
+
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+            windowDelete.content(temp(dataItem));
+            windowDelete.center().open();
+        }
+
+        function deleteMovie() {
+            var table = $("tr[data-uid='" + dataItem.uid + "']");
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify({ id: dataItem.ID }),
+                dataType: "json",
+                url: 'Movies/DeleteConfirmed',
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                dataType: 'json'
+            });
+
+            table.remove();
+            windowDelete.close();
+        }
+    </script>
+    <script type="text/x-kendo-template" id="deleteTemplate">
+        <div id="details-container">
+            <div class="text-center"> Delete #= Title # for sure? </div><br>
+            <div class="text-center"><button class="btn btn-danger" onclick="deleteMovie()"> Delete </button></div>
+        </div>
+    </script>
 </body>
 </html>

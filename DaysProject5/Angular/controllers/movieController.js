@@ -13,4 +13,8 @@ angular.module('myApp')
             var date = new Date(parseInt(unix)+10000000000);
             return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
         }
+
+        $scope.lengthh = function() {
+            return $scope.movies.length;
+        }
     });
