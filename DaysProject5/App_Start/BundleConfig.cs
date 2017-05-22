@@ -53,6 +53,11 @@ namespace DaysProject6
                         "~/Scripts/angular.min.js",
                         "~/Scripts/angular-route.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                        "~/Angular/app.js",
+                        "~/Angular/services/factory.js",
+                        "~/Angular/controllers/movieController.js"));
+
             bundles.IgnoreList.Clear();
         }
     }

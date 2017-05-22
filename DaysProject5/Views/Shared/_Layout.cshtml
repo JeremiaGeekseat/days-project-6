@@ -10,8 +10,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/kendo/js")
+    @Scripts.Render("~/bundles/angular")
 </head>
-<body>
+<body ng-app="myApp">
     <div class="wrapper">
 
         <header class="main-header">
@@ -128,7 +129,7 @@
         </footer>
         <div class="control-sidebar-bg"></div>
     </div>
-    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/app")
     @RenderSection("scripts", required: false)
 </body>
 </html>
